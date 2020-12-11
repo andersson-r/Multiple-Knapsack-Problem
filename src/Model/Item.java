@@ -6,10 +6,13 @@ package Model;
 public class Item {
     int weight;
     int value;
+    float benefit;
 
     public Item(int weight, int value) {
         this.weight = weight;
         this.value = value;
+
+        benefit = value/weight;
     }
 
     public int getWeight() {
@@ -18,5 +21,9 @@ public class Item {
 
     public int getValue() {
         return value;
+    }
+
+    public float getBenefit() {
+        return benefit;
     }
 }
