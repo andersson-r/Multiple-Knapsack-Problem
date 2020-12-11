@@ -54,7 +54,7 @@ public class Greedy {
     private void addToKnapsack(Item item) {
 
         //Choose first available knapsack
-        boolean found = false;
+        /*boolean found = false;
         int currentBag = 0;
 
         while (!found) {
@@ -66,10 +66,10 @@ public class Greedy {
             }
 
         }
-
+*/
 
         //Choose knapsack with least amount of remaining weight
-        /*Bag bestFit = null;
+        Bag bestFit = null;
 
         for (int i = 0; i < bags.length; i++) {
             if (bags[i].getCurrentSize() > item.getWeight()) {
@@ -85,8 +85,26 @@ public class Greedy {
 
         }
 
-        bestFit.setItems(item);*/
+        if(bestFit != null) {
+            bestFit.setItems(item);
 
+        }
+
+
+    }
+
+    public void printResult() {
+
+        System.out.println("Knapsacks: ");
+
+        for(int i = 0; i< bags.length; i++) {
+            System.out.println();
+
+            System.out.println("Capacity " + bags[i].getCapacity());
+            System.out.println("Space left " + bags[i].getCurrentSize());
+            System.out.println("Number of items " + bags[i].getItems().size());
+
+        }
 
     }
 
@@ -103,6 +121,9 @@ public class Greedy {
 
         Greedy greedy = new Greedy(items, bags);
         greedy.solve();
+        greedy.printResult();
+
+
 
 
     }

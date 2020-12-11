@@ -12,7 +12,7 @@ public class Item {
         this.weight = weight;
         this.value = value;
 
-        benefit = value/weight;
+        benefit = (float) value / (float) weight;
     }
 
     public int getWeight() {

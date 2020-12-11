@@ -53,11 +53,11 @@ public class Bag {
     public void setItems(Item item) {
         items.add(item);
 
-        currentSize = currentSize + item.getWeight();
+        currentSize = currentSize - item.getWeight();
     }
 
     public Item removeItem(Item item) {
-        currentSize = currentSize - item.getWeight();
+        currentSize = currentSize + item.getWeight();
         int index = items.indexOf(item);
         return items.remove(index);
     }
