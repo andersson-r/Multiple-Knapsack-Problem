@@ -34,4 +34,12 @@ public class Samples {
             bags[i] = new Bag(random.nextInt(21)+10);
         }
     }
+
+    public Item[] getItems() {
+        return items;
+    }
+
+    public Bag[] getBags() {
+        return bags;
+    }
 }
