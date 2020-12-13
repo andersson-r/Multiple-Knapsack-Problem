@@ -38,28 +38,37 @@ public class Bag {
         return totalValue;
     }
 
-    public void incrementTotalValue(int value){
-        this.totalValue+=value;
-    }
-
-    public void decrementTotalValue(int value){
-        this.totalValue-=value;
-    }
-
     public ArrayList<Item> getItems() {
         return items;
     }
 
-    public void setItems(Item item) {
-        items.add(item);
+    public Item getFirstItem(){
+        return items.get(0);
+    }
 
+    public void addItem(Item item) {
+        items.add(item);
         currentSize = currentSize - item.getWeight();
+        this.totalValue+=item.getValue();
+    }
+
+    public int availableSpace(){
+        return (capacity-currentSize);
     }
 
     public Item removeItem(Item item) {
         currentSize = currentSize + item.getWeight();
         int index = items.indexOf(item);
+        this.totalValue-= item.getValue();
         return items.remove(index);
     }
+
+    public String toString(){
+        return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", value: "+totalValue+")";
+    }
+    public String toFullString(){
+        return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", items: "+this.items+")";
+    }
+
 
 }

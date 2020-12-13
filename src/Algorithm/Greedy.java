@@ -86,7 +86,7 @@ public class Greedy {
         }
 
         if(bestFit != null) {
-            bestFit.setItems(item);
+            bestFit.addItem(item);
 
         }
 
@@ -128,5 +128,11 @@ public class Greedy {
 
     }
 
+    public Bag[] getBags() {
+        return bags;
+    }
 
+    public ArrayList<Item> getItems() {
+        return items;
+    }
 }

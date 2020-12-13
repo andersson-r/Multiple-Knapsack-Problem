@@ -42,4 +42,14 @@ public class Samples {
     public Bag[] getBags() {
         return bags;
     }
+
+//    public static void main(String[] args) {
+//        Samples s = new Samples();
+//        s.generateRandomValues(3, 1);
+//        System.out.println(s.getItems()[0].toString());
+//        s.getBags()[0].setItems(s.getItems()[0]);
+//        System.out.println(s.getBags()[0].toString());
+//        s.getBags()[0].removeItem(s.getItems()[0]);
+//        System.out.println(s.getBags()[0].toString());
+//    }
 }
