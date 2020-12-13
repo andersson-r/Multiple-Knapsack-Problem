@@ -16,7 +16,7 @@ public class Greedy {
             System.out.println();
         }
 
-        this.bags = bags;
+        this.bags = bags.clone();
 
         for (int i = 0; i < items.length; i++) {
             //System.out.println("item nbr " + i + " weight: " + items[i].getWeight() + " value: " + items[i].getValue());

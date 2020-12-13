@@ -1,5 +1,6 @@
 package Model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -10,8 +11,8 @@ public class Neighborhood {
     Bag[] bags;
 
     public Neighborhood(ArrayList<Item> unusedItems, Bag[] bags) {
-        this.unusedItems = unusedItems;
-        this.bags = bags;
+        this.unusedItems = new ArrayList<>(unusedItems);
+        this.bags = bags.clone();
     }
 
     public ArrayList<Item> getUnusedItems() {
@@ -31,7 +32,6 @@ public class Neighborhood {
     }
 
     public String toString(){
-        System.out.println("bags  " + bags[0].toString() + " . " + bags[1].toString());
-        return "Neighborhood with value: " + getTotalValue();
+        return "Neighborhood with value: " + getTotalValue() + "\n"+"bags  " + bags[0].toString() + " . " + bags[1].toString();
     }
 }
