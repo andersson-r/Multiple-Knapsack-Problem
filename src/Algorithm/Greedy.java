@@ -72,12 +72,12 @@ public class Greedy {
         Bag bestFit = null;
 
         for (int i = 0; i < bags.length; i++) {
-            if (bags[i].getCurrentSize() > item.getWeight()) {
+            if (bags[i].availableSpace() >= item.getWeight()) {
 
                 if (bestFit == null) {
                     bestFit = bags[i];
 
-                } else if (bags[i].getCurrentSize() < bestFit.getCurrentSize()) {
+                } else if (bags[i].availableSpace() <= bestFit.availableSpace()) {
                     bestFit = bags[i];
 
                 }
@@ -101,7 +101,7 @@ public class Greedy {
             System.out.println();
 
             System.out.println("Capacity " + bags[i].getCapacity());
-            System.out.println("Space left " + bags[i].getCurrentSize());
+            System.out.println("Space left " + bags[i].availableSpace());
             System.out.println("Number of items " + bags[i].getItems().size());
 
         }

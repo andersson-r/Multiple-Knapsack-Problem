@@ -75,6 +75,7 @@ public class NeighborhoodSearch {
      */
     private boolean removeFromBagToBag(Bag bagFrom, Bag bagTo, Item item){
         if(bagTo.availableSpace() >= item.getWeight()){
+            System.out.println("available space = "+ bagTo.availableSpace() + ", item weight: "+item.getWeight());
             bagTo.addItem(bagFrom.removeItem(item));
             return true;
         }

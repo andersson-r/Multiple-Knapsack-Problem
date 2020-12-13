@@ -22,17 +22,11 @@ public class Bag {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
 
     public int getCurrentSize() {
         return currentSize;
     }
 
-    public void setCurrentSize(int currentSize) {
-        this.currentSize = currentSize;
-    }
 
     public int getTotalValue() {
         return totalValue;
@@ -57,14 +51,14 @@ public class Bag {
     }
 
     public Item removeItem(Item item) {
-        currentSize = currentSize + item.getWeight();
+        currentSize += item.getWeight();
         int index = items.indexOf(item);
         this.totalValue-= item.getValue();
         return items.remove(index);
     }
 
     public String toString(){
-        return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", value: "+totalValue+")";
+        return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", items: "+items.size()+", value: "+totalValue+")";
     }
     public String toFullString(){
         return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", items: "+this.items+")";
