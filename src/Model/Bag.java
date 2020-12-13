@@ -13,7 +13,7 @@ public class Bag {
 
     public Bag(int capacity) {
         this.capacity = capacity;
-        this.currentSize = capacity;
+        this.currentSize = 0;
 
         items = new ArrayList<>();
     }
@@ -42,7 +42,7 @@ public class Bag {
 
     public void addItem(Item item) {
         items.add(item);
-        currentSize = currentSize - item.getWeight();
+        currentSize = currentSize + item.getWeight();
         this.totalValue+=item.getValue();
     }
 
@@ -51,7 +51,7 @@ public class Bag {
     }
 
     public Item removeItem(Item item) {
-        currentSize += item.getWeight();
+        currentSize -= item.getWeight();
         int index = items.indexOf(item);
         this.totalValue-= item.getValue();
         return items.remove(index);

@@ -19,7 +19,7 @@ public class Greedy {
         this.bags = bags;
 
         for (int i = 0; i < items.length; i++) {
-            System.out.println("item nbr " + i + " weight: " + items[i].getWeight() + " value: " + items[i].getValue());
+            //System.out.println("item nbr " + i + " weight: " + items[i].getWeight() + " value: " + items[i].getValue());
 
             this.items.add(items[i]);
         }
@@ -44,7 +44,7 @@ public class Greedy {
 
             items.remove(currentBest);
 
-            System.out.println("Currentbest W: " + currentBest.getWeight() + " V: " + currentBest.getValue() + " B: " + currentBest.getBenefit());
+            //System.out.println("Currentbest W: " + currentBest.getWeight() + " V: " + currentBest.getValue() + " B: " + currentBest.getBenefit());
             addToKnapsack(currentBest);
 
         }
