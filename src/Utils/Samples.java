@@ -28,10 +28,10 @@ public class Samples {
         items = new Item[nbrOfItems];
         bags = new Bag[nbrOfBags];
         for(int i = 0; i<items.length; i++){
-            items[i] = new Item(random.nextInt(30)+1, random.nextInt(30)+1);
+            items[i] = new Item(random.nextInt(30)+5, random.nextInt(30)+1);
         }
         for(int i = 0; i<bags.length;i++){
-            bags[i] = new Bag(random.nextInt(21)+10);
+            bags[i] = new Bag(random.nextInt(101)+30);
         }
     }
 

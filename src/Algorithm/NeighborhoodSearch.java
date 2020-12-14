@@ -41,34 +41,34 @@ public class NeighborhoodSearch {
         globalOptima = initial;                    //First solution has to be the best one so far
         items = greedy.getUnusedItems();
 
-        Neighborhood highestNeighbour = null;
+        Neighborhood highestNeighbour = initial;
         Neighborhood temp;
 
         //Amount of searches, outer loop
         for (int i = 0; i <= SEARCHES; i++) {
             closestNeighboors = new ArrayList<>();
             for (int j = 0; j < NEIGHBOURS_BY_6; j++) { //generate the neighborhood
-                temp = new Neighborhood(items, bags);     //generate a neighbour for each rotation type (4 types currently)
+                temp = new Neighborhood(highestNeighbour.getUnusedItems(), highestNeighbour.getBags());     //generate a neighbour for each rotation type (4 types currently)
                 rotateBags1(temp.getBags());
                 closestNeighboors.add(temp);
 
-                temp = new Neighborhood(items, bags);
+                temp = new Neighborhood(highestNeighbour.getUnusedItems(), highestNeighbour.getBags());
                 rotateBags2(temp.getBags());
                 closestNeighboors.add(temp);
 
-                temp = new Neighborhood(items, bags);
+                temp = new Neighborhood(highestNeighbour.getUnusedItems(), highestNeighbour.getBags());
                 rotateBags3(temp.getBags());
                 closestNeighboors.add(temp);
 
-                temp = new Neighborhood(items, bags);
+                temp = new Neighborhood(highestNeighbour.getUnusedItems(), highestNeighbour.getBags());
                 rotateUnused1(temp.getBags(), temp.getUnusedItems());
                 closestNeighboors.add(temp);
 
-                temp = new Neighborhood(items, bags);
+                temp = new Neighborhood(highestNeighbour.getUnusedItems(), highestNeighbour.getBags());
                 rotateUnused2(temp.getBags(), temp.getUnusedItems());
                 closestNeighboors.add(temp);
 
-                temp = new Neighborhood(items, bags);
+                temp = new Neighborhood(highestNeighbour.getUnusedItems(), highestNeighbour.getBags());
                 rotateUnused3(temp.getBags(), temp.getUnusedItems());
                 closestNeighboors.add(temp);
 
