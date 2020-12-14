@@ -13,8 +13,8 @@ public class Greedy {
 
     public Greedy(Item[] items, Bag[] bags) {
         for (int i = 0; i < bags.length; i++) {
-            System.out.println("Bag nbr " + i + " cap: " + bags[i].getCapacity());
-            System.out.println();
+//            System.out.println("Bag nbr " + i + " cap: " + bags[i].getCapacity());
+//            System.out.println();
         }
 
         this.bags = bags;

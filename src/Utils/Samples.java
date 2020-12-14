@@ -17,7 +17,7 @@ public class Samples {
     }
 
     /**
-     * Generate random values between 1-15 for items (Weights and values),
+     * Generate random values between 1-30 for items (Weights and values),
      * random values between 10 and 30 for bags (capacity).
      * Items and bags can be obtained through the corresponding get-methods.
      * @param nbrOfItems - number of items in the problem space
@@ -28,7 +28,7 @@ public class Samples {
         items = new Item[nbrOfItems];
         bags = new Bag[nbrOfBags];
         for(int i = 0; i<items.length; i++){
-            items[i] = new Item(random.nextInt(15)+1, random.nextInt(15)+1);
+            items[i] = new Item(random.nextInt(30)+1, random.nextInt(30)+1);
         }
         for(int i = 0; i<bags.length;i++){
             bags[i] = new Bag(random.nextInt(21)+10);
