@@ -41,9 +41,12 @@ public class Bag {
     }
 
     public void addItem(Item item) {
+
         items.add(item);
         currentSize = currentSize + item.getWeight();
         this.totalValue+=item.getValue();
+
+
     }
 
     public int availableSpace(){
@@ -51,9 +54,10 @@ public class Bag {
     }
 
     public Item removeItem(Item item) {
-        currentSize -= item.getWeight();
+
+        currentSize = currentSize - item.getWeight();
         int index = items.indexOf(item);
-        this.totalValue-= item.getValue();
+        this.totalValue -= item.getValue();
         return items.remove(index);
     }
 

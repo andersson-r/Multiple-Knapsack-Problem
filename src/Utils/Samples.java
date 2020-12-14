@@ -31,7 +31,7 @@ public class Samples {
             items[i] = new Item(random.nextInt(30)+5, random.nextInt(30)+1);
         }
         for(int i = 0; i<bags.length;i++){
-            bags[i] = new Bag(random.nextInt(101)+30);
+            bags[i] = new Bag(random.nextInt(70)+30);
         }
     }
 
