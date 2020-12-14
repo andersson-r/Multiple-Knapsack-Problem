@@ -18,8 +18,7 @@ public class NeighborhoodSearch {
     Bag[] bags;
     ArrayList<Item> items;                          //Dynamic so we can use the list for storing an retrieving unused items
     Neighborhood globalOptima;
-    ArrayList<Neighborhood> closestNeighboors;
-    static final int NEIGHBOURS_BY_6 = 100;       //amount of each rotation type, actual neighbours will be 6x the amount
+    ArrayList<Neighborhood> closestNeighbours;
     static final int SEARCHES = 100;                  //amount of searches to perform before termination
     Greedy greedy;
 
@@ -48,44 +47,41 @@ public class NeighborhoodSearch {
 
         //Amount of searches, outer loop
         for (int i = 0; i <= SEARCHES; i++) {
-            closestNeighboors = new ArrayList<>();
-            for (int j = 0; j < 1; j++) { //generate the neighborhood
+            closestNeighbours = new ArrayList<>();          //generate the neighborhood
 
-                temp = new Neighborhood(items, bags);     //generate a neighbour for each rotation type (4 types currently)
-                rotateBags1(temp.getBags());
-                closestNeighboors.add(temp);
+            temp = new Neighborhood(items, bags);     //generate a neighbour for each rotation type
+            rotateBags(temp.getBags(),1);
+            closestNeighbours.add(temp);
 
-                /*temp = new Neighborhood(items, bags);
-                rotateBags2(temp.getBags());
-                closestNeighboors.add(temp);
+            temp = new Neighborhood(items, bags);
+            rotateBags(temp.getBags(),2);
+            closestNeighbours.add(temp);
 
-                temp = new Neighborhood(items, bags);
-                rotateBags3(temp.getBags());
-                closestNeighboors.add(temp);*/
+            temp = new Neighborhood(items, bags);
+            rotateBags(temp.getBags(),3);
+            closestNeighbours.add(temp);
 
-                /*temp = new Neighborhood(items, bags);
-                rotateUnused1(temp.getBags(), temp.getUnusedItems());
-                closestNeighboors.add(temp);
+            temp = new Neighborhood(items, bags);
+            rotateUnused(temp.getBags(), temp.getUnusedItems(), 1);
+            closestNeighbours.add(temp);
 
-                temp = new Neighborhood(items, bags);
-                rotateUnused2(temp.getBags(), temp.getUnusedItems());
-                closestNeighboors.add(temp);
+            temp = new Neighborhood(items, bags);
+            rotateUnused(temp.getBags(), temp.getUnusedItems(), 2);
+            closestNeighbours.add(temp);
 
-                temp = new Neighborhood(items, bags);
-                rotateUnused3(temp.getBags(), temp.getUnusedItems());
-                closestNeighboors.add(temp);*/
+            temp = new Neighborhood(items, bags);
+            rotateUnused(temp.getBags(), temp.getUnusedItems(), 3);
+            closestNeighbours.add(temp);
 
 
-            }
+            highestNeighbour= closestNeighbours.get(0);      //initial neighbour to compare to
 
-            highestNeighbour=closestNeighboors.get(0);      //initial neighbour to compare to
-
-            for (int j = 0; j < closestNeighboors.size(); j++) {    //After generating neighborhood, compare which has highest value
+            for (int j = 0; j < closestNeighbours.size(); j++) {    //After generating neighborhood, compare which has highest value
 
                 // System.out.println("closest " + closestNeighboors.get(j).getTotalValue() + "vs " + highestNeighbour.getTotalValue());
 
-                if (closestNeighboors.get(j).getTotalValue() >= highestNeighbour.getTotalValue()) {
-                    highestNeighbour=closestNeighboors.get(j);
+                if (closestNeighbours.get(j).getTotalValue() >= highestNeighbour.getTotalValue()) {
+                    highestNeighbour= closestNeighbours.get(j);
 
                     bags = highestNeighbour.getBags();
                     items = highestNeighbour.getUnusedItems();
@@ -101,7 +97,7 @@ public class NeighborhoodSearch {
 
             }
 
-            closestNeighboors.clear();
+            closestNeighbours.clear();
 
 
         }
@@ -124,39 +120,38 @@ public class NeighborhoodSearch {
     private void removeFromBagToUnused(Bag bag, Item item, ArrayList<Item> unused){
         unused.add(bag.removeItem(item));
     }
+
     /**
-     * Moves an item from one bag to another by first removing
-     * an item from the bag to the unused list in order to make
-     * space for the item. If the desired item doesnt fit, we try
-     * to put in an item from the unused bag.
+     * Swaps items between bags by first attempting 30 times to remove
+     * an random item in the first bag to insert it to the second bag by
+     * also removing a random item from that bag (2nd bag). If 30 attempts
+     * passed and no swap is made, method ends. If a swap is made, we try
+     * to take the removed item from the 2nd bag and insert in the first bag
+     * (in order to swap between the two bags) if that cant be made due to lack of
+     * space, we will attempt to fit an item from the unused items-list to the first bag.
      * @param bagFrom
      * @param bagTo
-     * @param item
      * @return
      */
-    private boolean moveFromBagToBag(Bag bagFrom, Bag bagTo, Item item){
-
-
-        if((bagTo.availableSpace() + bagTo.getFirstItem().getWeight()) >= item.getWeight()){
-
-            removeFromBagToUnused(bagTo, bagTo.getFirstItem(), bagTo.getItems());
-
-
-            /*System.out.println();
-            System.out.println("Available space: " + bagTo.availableSpace());
-            System.out.println("item weight " + item.getWeight());
-            System.out.println("Capacity " + bagTo.getCapacity());*/
-
-            Item itemToAdd = bagFrom.removeItem(item);
-
-            bagTo.addItem(itemToAdd);
-
-            return true;
+    private boolean moveFromBagToBag(Bag bagFrom, Bag bagTo){
+        for (int i = 0; i < 30; i++) {
+            Item itemToAdd = bagFrom.getRandomItem();
+            Item itemToRemove = bagTo.getRandomItem();
+            Item temp = null;
+            if ((bagTo.availableSpace() + itemToRemove.getWeight()) >= itemToAdd.getWeight()) {
+                temp = bagTo.removeItem(itemToRemove);
+                bagTo.addItem(itemToAdd);
+                bagFrom.removeItem(itemToAdd);
+                //try to move the item removed from first bag to the second bag
+                if(bagFrom.availableSpace()>=temp.getWeight())
+                    bagFrom.addItem(temp);
+                else {
+                    bagTo.getItems().add(temp); //we have to put it into the unused list if we cant fit it into the other bag
+                    addFromUnusedToBag(bagFrom, bagFrom.getItems());
+                }
+                return true;
+            }
         }
-       // addFromUnusedToBag(bagTo, bagTo.getItems());
-
-        //System.out.println("After movefrombagtobag: ");
-        //System.out.println(bagFrom.toString());
         return false;
     }
 
@@ -176,35 +171,29 @@ public class NeighborhoodSearch {
         return false;
     }
 
-    //THREE-ROTATIONS
+    //ROTATIONS
     /**
-     * Rotate 3 items between all bags, requires at lest 2 bags
+     * Rotate x items between all bags, requires at lest 2 bags
      * if an item doesnt fit, it will just take the next one in list until it goes through the whole list
      * if no item fits, it skips.
      * @param bags
      */
-    private boolean rotateBags3(Bag[] bags) {
+    private boolean rotateBags(Bag[] bags, int times) {
         if(bags.length==2){
             Bag bag1 = bags[0], bag2 = bags[1];
-            for(int i = 0; i<3;i++)
-                moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-            for(int i = 0; i<3;i++)
-                moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
+            for(int i = 0; i<times;i++)
+                moveFromBagToBag(bag1, bag2);
         }else if(bags.length>=2){
             //Handle the first bag to swap with the last bag (in list)
             Bag bag1 = bags[0], bag2 = bags[bags.length-1];
-            for(int i = 0; i<3;i++)
-                moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-            for(int i = 0; i<3;i++)
-                moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
+            for(int i = 0; i<times;i++)
+                moveFromBagToBag(bag1, bag2);
             //Handle the rest of the bags
             for(int j = 1; j<bags.length; j++){
                 bag1 = bags[j];
                 bag2 = bags[j-1];
-                for(int i = 0; i<3;i++)
-                    moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-                for(int i = 0; i<3;i++)
-                    moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
+                for(int i = 0; i<times;i++)
+                    moveFromBagToBag(bag1, bag2);
             }
 
         }
@@ -217,125 +206,16 @@ public class NeighborhoodSearch {
      * @param bags
      * @return
      */
-    private boolean rotateUnused3(Bag[] bags, ArrayList<Item> unused){
+    private boolean rotateUnused(Bag[] bags, ArrayList<Item> unused, int times){
         for(int i = 0; i<bags.length; i++){
-            for(int j=0; j<3; j++){
-                removeFromBagToUnused(bags[i], bags[i].getFirstItem(), unused);
+            for(int j=0; j<times; j++){
+                removeFromBagToUnused(bags[i], bags[i].getRandomItem(), unused);
                 addFromUnusedToBag(bags[i], unused);
             }
         }
         return false;
     }
 
-    //TWO-ROTATIONS
-
-    /**
-     * Rotate 3 items between all bags, requires at lest 2 bags
-     * if an item doesnt fit, it will just take the next one in list until it goes through the whole list
-     * if no item fits, it skips.
-     * @param bags
-     */
-    private boolean rotateBags2(Bag[] bags) {
-        if(bags.length==2){
-            Bag bag1 = bags[0], bag2 = bags[1];
-            for(int i = 0; i<2;i++)
-                moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-            for(int i = 0; i<2;i++)
-                moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
-        }else if(bags.length>=2){
-            //Handle the first bag to swap with the last bag (in list)
-            Bag bag1 = bags[0], bag2 = bags[bags.length-1];
-            for(int i = 0; i<2;i++)
-                moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-            for(int i = 0; i<2;i++)
-                moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
-            //Handle the rest of the bags
-            for(int j = 1; j<bags.length; j++){
-                bag1 = bags[j];
-                bag2 = bags[j-1];
-                for(int i = 0; i<2;i++)
-                    moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-                for(int i = 0; i<2;i++)
-                    moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
-            }
-
-        }
-        return false;
-    }
-
-    /**
-     * Removes first item in bag and places it last on the unused-items list, then take
-     * the first item in the unused-items list, if the items doesnt fit it just skips
-     * @param bags
-     * @return
-     */
-    private boolean rotateUnused2(Bag[] bags, ArrayList<Item> unused){
-        for(int i = 0; i<bags.length; i++){
-            for(int j=0; j<2; j++){
-                removeFromBagToUnused(bags[i], bags[i].getFirstItem(), unused);
-                addFromUnusedToBag(bags[i], unused);
-            }
-        }
-        return false;
-    }
-
-    //ONE-ROTATIONS
-
-    /**
-     * Rotate 3 items between all bags, requires at lest 2 bags
-     * if an item doesnt fit, it will just take the next one in list until it goes through the whole list
-     * if no item fits, it skips.
-     * @param bags
-     */
-    private boolean rotateBags1(Bag[] bags) {
-
-        /*for(int i = 0; i<bags.length; i++) {
-            System.out.println("before: " + bags[i].toString());
-        }*/
-
-
-
-        if(bags.length==2){
-            Bag bag1 = bags[0], bag2 = bags[1];
-            moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-            moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
-        }else if(bags.length>=2){
-            //Handle the first bag to swap with the last bag (in list)
-            Bag bag1 = bags[0], bag2 = bags[bags.length-1];
-            moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-            moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
-            //Handle the rest of the bags
-            for(int j = 1; j<bags.length; j++){
-                bag1 = bags[j];
-                bag2 = bags[j-1];
-                moveFromBagToBag(bag1, bag2, bag1.getFirstItem());
-                moveFromBagToBag(bag2, bag1, bag2.getFirstItem());
-            }
-
-        }
-
-        /*for(int i = 0; i<bags.length; i++) {
-            System.out.println("after: " + bags[i].toString());
-        }*/
-
-
-        return false;
-    }
-
-    /**
-     * Removes first item in bag and places it last on the unused-items list, then take
-     * the first item in the unused-items list, if the items doesnt fit it just skips
-     * @param bags
-     * @return
-     */
-    private boolean rotateUnused1(Bag[] bags, ArrayList<Item> unused){
-        for(int i = 0; i<bags.length; i++){
-            removeFromBagToUnused(bags[i], bags[i].getFirstItem(), unused);
-            addFromUnusedToBag(bags[i], unused);
-
-        }
-        return false;
-    }
 
 
     //For testing purposes

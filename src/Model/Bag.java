@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A representation of the Bag/Knapsack that we will fill with items
@@ -10,6 +11,7 @@ public class Bag {
     int currentSize;
     int totalValue;
     ArrayList<Item> items;
+    Random random = new Random();
 
     public Bag(int capacity) {
         this.capacity = capacity;
@@ -36,8 +38,11 @@ public class Bag {
         return items;
     }
 
-    public Item getFirstItem(){
-        return items.get(0);
+    public Item getRandomItem(){
+        int index = 0;
+        if(!items.isEmpty())
+            index = random.nextInt(items.size());
+        return items.get(index);
     }
 
     public void addItem(Item item) {
