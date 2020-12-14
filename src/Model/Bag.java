@@ -57,6 +57,16 @@ public class Bag {
         return items.remove(index);
     }
 
+    public Bag clone() {
+        Bag newBag = new Bag(capacity);
+        newBag.currentSize = currentSize;
+        newBag.totalValue = totalValue;
+
+        newBag.items = new ArrayList<>(items);
+
+        return newBag;
+    }
+
     public String toString(){
         return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", items: "+items.size()+", value: "+totalValue+")";
     }

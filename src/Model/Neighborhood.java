@@ -12,7 +12,13 @@ public class Neighborhood {
 
     public Neighborhood(ArrayList<Item> unusedItems, Bag[] bags) {
         this.unusedItems = new ArrayList<>(unusedItems);
-        this.bags = bags.clone();
+
+        this.bags = new Bag[bags.length];
+        for(int i = 0; i<bags.length; i++) {
+            this.bags[i] = bags[i].clone();
+
+        }
+
     }
 
     public ArrayList<Item> getUnusedItems() {

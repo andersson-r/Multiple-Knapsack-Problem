@@ -9,23 +9,37 @@ import java.util.ArrayList;
 public class Greedy {
     private Bag[] bags;
     private ArrayList<Item> items = new ArrayList<Item>();
+    private ArrayList<Item> unusedItems = new ArrayList<>();
 
     public Greedy(Item[] items, Bag[] bags) {
-        for(int i = 0; i < bags.length; i++) {
-            System.out.println("Bag nbr "+ i + " cap: " + bags[i].getCapacity());
+        for (int i = 0; i < bags.length; i++) {
+            System.out.println("Bag nbr " + i + " cap: " + bags[i].getCapacity());
             System.out.println();
         }
 
-        this.bags = bags.clone();
+        this.bags = bags;
+
 
         for (int i = 0; i < items.length; i++) {
-            //System.out.println("item nbr " + i + " weight: " + items[i].getWeight() + " value: " + items[i].getValue());
 
             this.items.add(items[i]);
         }
     }
 
     public void solve() {
+
+        //BAD SOLUTION FOR TESTING
+        /*while (items.size() != 0) {
+
+            //System.out.println("Currentbest W: " + currentBest.getWeight() + " V: " + currentBest.getValue() + " B: " + currentBest.getBenefit());
+            addToKnapsack(items.remove(0));
+
+        }*/
+
+
+
+
+
 
         /*
         Selects "best" item to add based on calculated benefit (value/weight)
@@ -57,16 +71,21 @@ public class Greedy {
         /*boolean found = false;
         int currentBag = 0;
 
-        while (!found) {
+        while (!found && currentBag < bags.length) {
 
-            if (bags[currentBag].getCurrentSize() > item.getWeight()) {
-                bags[currentBag].setItems(item);
+            if (bags[currentBag].availableSpace() > item.getWeight()) {
+                bags[currentBag].addItem(item);
                 found = true;
 
             }
 
+            currentBag++;
+
         }
-*/
+
+        if(!found) {
+            unusedItems.add(item);
+        }*/
 
         //Choose knapsack with least amount of remaining weight
         Bag bestFit = null;
@@ -85,8 +104,11 @@ public class Greedy {
 
         }
 
-        if(bestFit != null) {
+        if (bestFit != null) {
             bestFit.addItem(item);
+
+        } else {
+            unusedItems.add(item);
 
         }
 
@@ -97,7 +119,7 @@ public class Greedy {
 
         System.out.println("Knapsacks: ");
 
-        for(int i = 0; i< bags.length; i++) {
+        for (int i = 0; i < bags.length; i++) {
             System.out.println();
 
             System.out.println("Capacity " + bags[i].getCapacity());
@@ -124,15 +146,13 @@ public class Greedy {
         greedy.printResult();
 
 
-
-
     }
 
     public Bag[] getBags() {
         return bags;
     }
 
-    public ArrayList<Item> getItems() {
-        return items;
+    public ArrayList<Item> getUnusedItems() {
+        return unusedItems;
     }
 }

@@ -28,6 +28,7 @@ public class NeighborhoodSearch {
         sample.generateRandomValues(100, 2);
         this.bags = sample.getBags();
         this.items = new ArrayList<>(Arrays.asList(sample.getItems()));
+        closestNeighboors = new ArrayList<>();
     }
 
     /**
@@ -36,8 +37,11 @@ public class NeighborhoodSearch {
     public void search(){
         greedy = new Greedy(items.toArray(new Item[items.size()]), bags);
         greedy.solve();                           //Starting solution solved using greedy algorithm
-        Neighborhood initial = new Neighborhood(greedy.getItems(), greedy.getBags()); //Starting point
+        System.out.println("Nbr of unused items from greedy solution: " + greedy.getUnusedItems().size());
+        Neighborhood initial = new Neighborhood(greedy.getUnusedItems(), bags); //Starting point
         globalOptima = initial;                    //First solution has to be the best one so far
+        items = greedy.getUnusedItems();
+        System.out.println("BEFORE " + initial.toString());
         
         Neighborhood highestNeighbour = null;
         Neighborhood temp;
@@ -48,30 +52,55 @@ public class NeighborhoodSearch {
                 temp = new Neighborhood(items, bags);     //generate a neighbour for each rotation type (4 types currently)
                 rotateBags2(temp.getBags());
                 closestNeighboors.add(temp);
+                //System.out.println("first" + temp.getTotalValue());
 
                 temp = new Neighborhood(items, bags);
                 rotateBags3(temp.getBags());
                 closestNeighboors.add(temp);
+                //System.out.println("second" + temp.getTotalValue());
 
                 temp = new Neighborhood(items, bags);
                 rotateUnused2(temp.getBags(), temp.getUnusedItems());
                 closestNeighboors.add(temp);
+                //System.out.println("third" + temp.getTotalValue());
 
                 temp = new Neighborhood(items, bags);
                 rotateUnused3(temp.getBags(), temp.getUnusedItems());
                 closestNeighboors.add(temp);
+                //System.out.println("fourth" + temp.getTotalValue());
             }
 
             highestNeighbour=closestNeighboors.get(0);      //initial neighbour to compare to
+
             for (int j = 0; j < closestNeighboors.size(); j++) {    //After generating neighborhood, compare which has highest value
-                if (closestNeighboors.get(i).getTotalValue()>highestNeighbour.getTotalValue())
-                    highestNeighbour=closestNeighboors.get(i);
+
+               // System.out.println("closest " + closestNeighboors.get(j).getTotalValue() + "vs " + highestNeighbour.getTotalValue());
+
+                if (closestNeighboors.get(j).getTotalValue() >= highestNeighbour.getTotalValue()) {
+                    highestNeighbour=closestNeighboors.get(j);
+
+                    bags = highestNeighbour.getBags();
+                    items = highestNeighbour.getUnusedItems();
+
+
+
+                }
             }
-            if (highestNeighbour.getTotalValue()>globalOptima.getTotalValue())
+
+            if (highestNeighbour.getTotalValue()>globalOptima.getTotalValue()) {
+                System.out.println(highestNeighbour.getTotalValue() + "is higher than global" + globalOptima.getTotalValue());
                 globalOptima=highestNeighbour;                      //set new global optima if the local optima is > than previous global
+
+            }
+
+            closestNeighboors.clear();
+
+
         }
         System.out.println("initial result:\n" + initial.toString());
         System.out.println("after neighborhoodsearch:\n" + globalOptima.toString());
+
+
     }
 
 
@@ -100,7 +129,7 @@ public class NeighborhoodSearch {
      */
     private boolean removeFromBagToBag(Bag bagFrom, Bag bagTo, Item item){
         if(bagTo.availableSpace() >= item.getWeight()){
-            System.out.println("available space = "+ bagTo.availableSpace() + ", item weight: "+item.getWeight());
+            //System.out.println("available space = "+ bagTo.availableSpace() + ", item weight: "+item.getWeight());
             bagTo.addItem(bagFrom.removeItem(item));
             return true;
         }
