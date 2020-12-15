@@ -40,16 +40,21 @@ public class Bag {
 
     public Item getRandomItem(){
         int index = 0;
-        if(!items.isEmpty())
+        if(!items.isEmpty()) {
             index = random.nextInt(items.size());
-        return items.get(index);
+            return items.get(index);
+
+        } else {
+            return null;
+        }
+
     }
 
     public void addItem(Item item) {
 
         items.add(item);
         currentSize = currentSize + item.getWeight();
-        this.totalValue+=item.getValue();
+        this.totalValue += item.getValue();
 
 
     }
@@ -60,7 +65,9 @@ public class Bag {
 
     public Item removeItem(Item item) {
 
+
         currentSize = currentSize - item.getWeight();
+
         int index = items.indexOf(item);
         this.totalValue -= item.getValue();
         return items.remove(index);
@@ -77,10 +84,10 @@ public class Bag {
     }
 
     public String toString(){
-        return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", items: "+items.size()+", value: "+totalValue+")";
+        return "Bag(capacity: " + this.capacity + ", current size: " +this.currentSize + ", items: "+items.size()+", value: "+totalValue+")";
     }
     public String toFullString(){
-        return "Bag(capacity: "+this.capacity + ", current size: " +this.currentSize + ", items: "+this.items+")";
+        return "Bag(capacity: " + this.capacity + ", current size: " +this.currentSize + ", items: "+this.items+")";
     }
 
 

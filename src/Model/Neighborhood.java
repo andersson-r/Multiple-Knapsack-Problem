@@ -38,6 +38,12 @@ public class Neighborhood {
     }
 
     public String toString(){
-        return "Neighborhood with value: " + getTotalValue() + "\n"+"bags  " + bags[0].toString() + " . " + bags[1].toString();
+        String res = "Neighborhood with value: " + getTotalValue() + "\n";
+
+        for(int i = 0; i<bags.length; i++) {
+            res += bags[i].toString() + "\n";
+        }
+
+        return res;
     }
 }
