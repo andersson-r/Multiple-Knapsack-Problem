@@ -15,7 +15,7 @@ import java.util.Arrays;
  * between bags(knapsacks) and rotating between a bag and the unused-items list.
  */
 public class NeighborhoodSearch {
-    int nbrOfItems = 10;
+    int nbrOfItems = 100;
     int nbrOfBags = 2;
 
 
